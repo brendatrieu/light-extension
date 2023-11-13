@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Window Tints",
+  "description": "Dynamic tints for your Chrome window to reduce strain on your eyes throughout the day.",
+  "version": "1.0",
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "light-icon.png"
+  },
+  "icons": {
+    "16": "light-icon.png",
+    "48": "light-icon.png",
+    "128": "light-icon.png"
+  }
+}
