@@ -1,7 +1,4 @@
 export {};
-/** Fired when the extension is first installed,
- *  when the extension is updated to a new version,
- *  and when Chrome is updated to a new version. */
 
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
@@ -36,4 +33,15 @@ chrome.runtime.onStartup.addListener(() => {
 chrome.runtime.onSuspend.addListener(() => {
   console.log('[background.js] onSuspend');
   alert('[background.js] onSuspend');
+});
+
+chrome.action.onClicked.addListener((tab) => {
+  console.log('clicked');
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id as number },
+    func: () => {
+      alert('Hello from my extension');
+      document.body.style.backgroundColor = 'blue';
+    },
+  });
 });
