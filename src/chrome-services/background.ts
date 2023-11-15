@@ -5,8 +5,8 @@ chrome.runtime.onInstalled.addListener((details) => {
     chrome.windows.create({
       type: 'popup',
       url: 'index.html',
-      width: 400,
-      height: 400,
+      width: 300,
+      height: 300,
     });
   }
 });
@@ -39,8 +39,33 @@ chrome.action.onClicked.addListener((tab) => {
   chrome.scripting.executeScript({
     target: { tabId: tab.id as number },
     func: () => {
-      alert('Hello from my extension');
       document.body.style.backgroundColor = 'blue';
     },
   });
 });
+
+chrome.runtime.onMessage.addListener(
+  (
+    message: { action: string; tabId: number },
+    sender: chrome.runtime.MessageSender,
+    sendResponse: (response: { status: string }) => void
+  ) => {
+    console.log('message received');
+    if (message.action === 'changeBackgroundColor') {
+      console.log('message matches');
+      chrome.scripting
+        .executeScript({
+          target: { tabId: message.tabId },
+          func: () => {
+            console.log('function ran');
+            document.body.style.backgroundColor = 'blue';
+          },
+        })
+        .then(() => {
+          console.log('success');
+          sendResponse({ status: 'success' });
+        })
+        .catch((error) => console.error('Error executing script', error));
+    }
+  }
+);

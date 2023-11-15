@@ -2,14 +2,31 @@ import './App.css';
 
 function App() {
   async function handleClick() {
-    let [tab] = await chrome.tabs.query({ active: true });
-
-    chrome.scripting.executeScript({
-      target: { tabId: tab.id! },
-      func: () => {
-        alert('Hello from my extension!');
-      },
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      console.log('tabs', tabs);
+      const tab = tabs[0];
+      if (tab.id) {
+        console.log('tabID');
+        chrome.runtime.sendMessage({
+          action: 'changeBackgroundColor',
+          tabId: tab.id,
+        });
+      }
     });
+
+    // chrome.runtime.sendMessage({
+
+    // });
+    // console.log('tab', tab);
+
+    // await chrome.scripting.executeScript({
+    //   target: { tabId: tab.id as number },
+    //   func: () => {
+    //     // document.body.style.backgroundColor = 'green';
+    //     console.log('script');
+    //     // alert('HELLO');
+    //   },
+    // });
   }
 
   return (
