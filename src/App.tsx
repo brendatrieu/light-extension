@@ -8,7 +8,7 @@ function App() {
         chrome.runtime.sendMessage({
           action: 'changeBackgroundColor',
           tabId: tab.id,
-          color: 'red',
+          color: 'rgba(255,216,2, 0.25)',
         });
       }
     });

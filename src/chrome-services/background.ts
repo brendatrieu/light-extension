@@ -54,8 +54,17 @@ chrome.runtime.onMessage.addListener(
       chrome.scripting
         .executeScript({
           target: { tabId: message.tabId },
-          func: (arg) => {
-            document.body.style.backgroundColor = arg;
+          func: (color) => {
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.inset = '0';
+            overlay.style.zIndex = '100';
+            overlay.style.pointerEvents = 'none';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.margin = '0';
+            overlay.style.backgroundColor = color;
+            document.body.appendChild(overlay);
           },
           args: [message.color],
         })
