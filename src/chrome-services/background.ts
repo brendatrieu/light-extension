@@ -46,23 +46,20 @@ chrome.action.onClicked.addListener((tab) => {
 
 chrome.runtime.onMessage.addListener(
   (
-    message: { action: string; tabId: number },
+    message: { action: string; tabId: number; color: string },
     sender: chrome.runtime.MessageSender,
     sendResponse: (response: { status: string }) => void
   ) => {
-    console.log('message received');
     if (message.action === 'changeBackgroundColor') {
-      console.log('message matches');
       chrome.scripting
         .executeScript({
           target: { tabId: message.tabId },
-          func: () => {
-            console.log('function ran');
-            document.body.style.backgroundColor = 'blue';
+          func: (arg) => {
+            document.body.style.backgroundColor = arg;
           },
+          args: [message.color],
         })
         .then(() => {
-          console.log('success');
           sendResponse({ status: 'success' });
         })
         .catch((error) => console.error('Error executing script', error));
