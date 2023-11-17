@@ -1,18 +1,7 @@
 import './App.css';
 
 function App() {
-  async function handleClick() {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      const tab = tabs[0];
-      if (tab.id) {
-        chrome.runtime.sendMessage({
-          action: 'changeBackgroundColor',
-          tabId: tab.id,
-          color: 'rgba(255,216,2, 0.25)',
-        });
-      }
-    });
-  }
+  async function handleClick() {}
 
   return (
     <div className="App">

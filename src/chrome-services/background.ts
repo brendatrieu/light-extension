@@ -11,37 +11,31 @@ chrome.runtime.onInstalled.addListener((details) => {
   }
 });
 
-chrome.runtime.onConnect.addListener((port) => {
-  console.log('[background.js] onConnect', port);
-  alert('[background.js] onInstalled');
-});
-
-chrome.runtime.onStartup.addListener(() => {
-  console.log('[background.js] onStartup');
-  alert('[background.js] onInstalled');
-});
-
-/**
- *  Sent to the event page just before it is unloaded.
- *  This gives the extension opportunity to do some clean up.
- *  Note that since the page is unloading,
- *  any asynchronous operations started while handling this event
- *  are not guaranteed to complete.
- *  If more activity for the event page occurs before it gets
- *  unloaded the onSuspendCanceled event will
- *  be sent and the page won't be unloaded. */
-chrome.runtime.onSuspend.addListener(() => {
-  console.log('[background.js] onSuspend');
-  alert('[background.js] onSuspend');
-});
-
-chrome.action.onClicked.addListener((tab) => {
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id as number },
-    func: () => {
-      document.body.style.backgroundColor = 'blue';
-    },
-  });
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (
+    changeInfo.status === 'complete' &&
+    !tab.incognito &&
+    !/^chrome:/.test(tab.url as string)
+  ) {
+    chrome.scripting.executeScript({
+      target: { tabId: tabId },
+      func: () => {
+        if (!document.querySelector('#window-tint')) {
+          const overlay = document.createElement('div');
+          overlay.style.position = 'fixed';
+          overlay.style.inset = '0';
+          overlay.style.zIndex = '100000';
+          overlay.style.pointerEvents = 'none';
+          overlay.style.width = '100vw';
+          overlay.style.height = '100vh';
+          overlay.style.margin = '0';
+          overlay.style.backgroundColor = 'rgba(247, 235, 201, 0.18)';
+          overlay.id = 'window-tint';
+          document.body.appendChild(overlay);
+        }
+      },
+    });
+  }
 });
 
 chrome.runtime.onMessage.addListener(
@@ -58,12 +52,13 @@ chrome.runtime.onMessage.addListener(
             const overlay = document.createElement('div');
             overlay.style.position = 'fixed';
             overlay.style.inset = '0';
-            overlay.style.zIndex = '100';
+            overlay.style.zIndex = '100000';
             overlay.style.pointerEvents = 'none';
             overlay.style.width = '100vw';
             overlay.style.height = '100vh';
             overlay.style.margin = '0';
             overlay.style.backgroundColor = color;
+            overlay.id = 'window-tint';
             document.body.appendChild(overlay);
           },
           args: [message.color],

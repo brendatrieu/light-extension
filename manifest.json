@@ -19,6 +19,6 @@
     }
   ],
   "background": { "service_worker": "./static/js/background.js" },
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "tabs"],
   "host_permissions": ["http://*/*", "https://*/*"]
 }
