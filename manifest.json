@@ -4,7 +4,8 @@
   "description": "Dynamic tints for your Chrome window to reduce strain on your eyes throughout the day.",
   "version": "1.0",
   "action": {
-    "default_icon": "light-icon.png"
+    "default_icon": "light-icon.png",
+    "default_popup": "index.html"
   },
   "icons": {
     "16": "light-icon.png",
@@ -18,6 +19,6 @@
     }
   ],
   "background": { "service_worker": "./static/js/background.js" },
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "tabs"],
   "host_permissions": ["http://*/*", "https://*/*"]
 }
