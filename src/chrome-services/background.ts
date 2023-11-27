@@ -40,7 +40,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
 chrome.runtime.onMessage.addListener(
   (
-    message: { action: string; tabId: number; color: string },
+    message: { action: string; tabId: number; color?: string },
     sender: chrome.runtime.MessageSender,
     sendResponse: (response: { status: string }) => void
   ) => {
@@ -57,11 +57,32 @@ chrome.runtime.onMessage.addListener(
             overlay.style.width = '100vw';
             overlay.style.height = '100vh';
             overlay.style.margin = '0';
-            overlay.style.backgroundColor = color;
+            if (message.color) {
+              overlay.style.backgroundColor = color!;
+            }
             overlay.id = 'window-tint';
             document.body.appendChild(overlay);
           },
           args: [message.color],
+        })
+        .then(() => {
+          sendResponse({ status: 'success' });
+        })
+        .catch((error) => console.error('Error executing script', error));
+    }
+
+    if (message.action === 'disableTint') {
+      chrome.scripting
+        .executeScript({
+          target: { tabId: message.tabId },
+          func: () => {
+            const overlay = document.querySelector(
+              '#window-tint'
+            ) as HTMLDivElement | null;
+            if (overlay) {
+              overlay.style.display = 'none';
+            }
+          },
         })
         .then(() => {
           sendResponse({ status: 'success' });
