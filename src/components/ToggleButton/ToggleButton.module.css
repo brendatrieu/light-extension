@@ -1,0 +1,15 @@
+.toggleContainer {
+  width: 5rem;
+  height: 2.5rem;
+  border-radius: 1.25rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.button {
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: white;
+  border: 2px solid rgb(219, 219, 219);
+}
